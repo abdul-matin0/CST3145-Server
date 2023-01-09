@@ -1,7 +1,7 @@
-import express from "express";
-import cors from "cors";
+const express = require("express");
+const cors = require("cors");
 /// gets lessons data from lessons
-import { lessons } from './lessons';
+const lessonsData = require('./lessons');
 
 let app = express();
 app.set('json spaces', 3);
@@ -30,7 +30,7 @@ app.get("/user", function(req, res) {
 
 /// {/lessons} route to get list of lessons
 app.get("/lessons", function(req, res) {
-    res.json(lessons);
+    res.json(lessonsData.lessons);
 });
 
 /// handles invalid request
