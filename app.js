@@ -6,6 +6,7 @@ const lessonsData = require('./lessons');
 let app = express();
 app.set('json spaces', 3);
 
+// setup cors middleware
 app.use(cors());
 
 app.use(function(req, res, next) {
