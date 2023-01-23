@@ -33,11 +33,15 @@ app.set('json spaces', 3);
 // setup cors middleware
 app.use(cors());
 
+// logger’ middleware that output all requests to the server console 
 app.use(function (req, res, next) {
     // log incoming requests to console
     console.log("Incoming request: " + req.url);
     next();
 });
+
+// serving static files
+app.use('/static', express.static(path.join(__dirname, 'public')))
 
 /// middlware allows to intercept a param and intialize related collection
 app.param('collectionName'
