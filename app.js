@@ -2,7 +2,7 @@ const express = require("express");
 // cors required for cross origin resource sharing
 const cors = require("cors");
 const path = require('path');
-let propertiesReader = require("properties-reader");
+const propertiesReader = require("properties-reader");
 const bodyParser = require('body-parser');
 
 
@@ -58,33 +58,6 @@ app.get('/:collectionName', function (req, res, next) {
         res.send(results);
     });
 });
-
-
-//  http://localhost:3000/collections/products/2/title/asc
-// app.get('/collections/:collectionName/:max/:sortAspect/:sortAscDesc', function(
-// app.get('/:collectionName'
-//     , function (req, res, next) {
-//   //  const collectionName = req.params.collectionName;
-//         // req.collection.find({}, {limit: 3, sort: [["price", -1]]}).toArray
-
-//         // TODO: Validate params
-//         // var max = parseInt(req.params.max, 10); // base 10
-//         // let sortDirection = 1;
-//         // if (req.params.sortAscDesc === "desc") {
-//         // sortDirection = -1;
-//         // }
-//         // req.collection.find({}, {limit: max, sort: [[req.params.sortAspect,
-//         // sortDirection]]}).toArray(function(err, results) {
-//         // req.collection.findOne({ _id: new ObjectId(req.params.id) },
-//         // req.collection.find({}).toArray(function (err, results) {
-//         req.collection.findOne({ id: 10 }, function (err, results) {
-//             if (err) {
-//                 return next(err);
-//             }
-//             res.send(results);
-//         });
-//     });
-
 
 /// post route saves order to order collection
 app.post('/:collectionName'
