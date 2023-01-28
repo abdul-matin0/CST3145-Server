@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const path = require('path');
 let propertiesReader = require("properties-reader");
+const bodyParser = require('body-parser');
+
 
 
 // configuring connection settings to the DB with properties
@@ -33,6 +35,8 @@ app.set(express.urlencoded({ extended: true }))
 
 /// setup cors middleware
 app.use(cors());
+
+app.use(bodyParser.json()); // parse application/json
 
 /// logger’ middleware that output all requests to the server console 
 app.use(function (req, res, next) {
@@ -85,29 +89,30 @@ app.get('/:collectionName', function (req, res, next) {
 /// post route saves order to order collection
 app.post('/:collectionName'
     , function (req, res, next) {
-        
-        /// the data variable is used to collect the chunks of data from the request stream as they come in
-        var data = '';
-        req.on('data', function (temp) {
-            data += temp;
-        });
-
-        /// used to signal that all of the data has been received
-        req.on('end', function () {
-            try {
-                var requestObj = JSON.parse(data);
-                requestObj._id = new ObjectId();
-                req.collection.insertOne(requestObj, function (err, results) {
-                    if (err) {
-                        return next(err);
-                    }
-                    res.send(results);
-                });
-            } catch (e) {
-                next(e);
-            }
-        });
+        try {
+            req.body._id = new ObjectId();
+            req.collection.insertOne(req.body, function (err, results) {
+                if (err) {
+                    return next(err);
+                }
+                res.send(results);
+            });
+        } catch (e) {
+            next(e);
+        }
     });
+
+/// A PUT route that updates the number of available spaces in the
+/// 'lesson' collection after an order is submitted
+app.put('/:collectionName/:id', function (req, res, next) {
+    var id = req.params.id;
+    req.collection.updateOne({ _id: new ObjectId(id) }, { $set: req.body }, function (err, results) {
+        if (err) {
+            return next(err);
+        }
+        res.send(results);
+    });
+});
 
 
 app.get("/", function (req, res) {
