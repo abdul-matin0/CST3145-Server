@@ -17,10 +17,10 @@ let dbName = properties.get("db.dbName");
 let dbUrl = properties.get("db.dbUrl");
 let dbParams = properties.get("db.params");
 
-// mongoDB connection string
+/// mongoDB connection string
 const dbURI = dbPprefix + dbUserName + ":" + dbPassword + dbUrl + dbParams;
 
-// connecting by using MongoDB Stable API
+/// connecting by using MongoDB Stable API
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const client = new MongoClient(dbURI, { serverApi: ServerApiVersion.v1 });
 let db = client.db(dbName);
@@ -31,10 +31,10 @@ app.set('json spaces', 3);
 app.set(express.json())
 app.set(express.urlencoded({ extended: true }))
 
-// setup cors middleware
+/// setup cors middleware
 app.use(cors());
 
-// logger’ middleware that output all requests to the server console 
+/// logger’ middleware that output all requests to the server console 
 app.use(function (req, res, next) {
     // log incoming requests to console
     console.log("Incoming request: " + req.url);
@@ -43,8 +43,6 @@ app.use(function (req, res, next) {
 
 /// serving static files
 app.use('/static', express.static(path.join(__dirname, 'public')))
-
-
 
 /// https://localhost:3000/:collectionName
 /// get route returns all lessons
@@ -87,6 +85,7 @@ app.get('/:collectionName', function (req, res, next) {
 /// post route saves order to order collection
 app.post('/:collectionName'
     , function (req, res, next) {
+        
         /// the data variable is used to collect the chunks of data from the request stream as they come in
         var data = '';
         req.on('data', function (temp) {
@@ -115,20 +114,10 @@ app.get("/", function (req, res) {
     res.send("Welcome to my website!");
 });
 
-/// {/user} route endpoint to get user details
-app.get("/user", function (req, res) {
-
-    res.json({
-        "email": "user@email.com",
-        "password": "password"
-    });
-})
-
 /// handles invalid request
 app.use(function (req, res) {
     res.status(404).send("Resource not found...");
 });
-
 
 /// middlware allows to intercept a param and intialize related collection
 app.param('collectionName'
@@ -137,7 +126,7 @@ app.param('collectionName'
         req.collection = db.collection(collectionName);
         return next();
     });
-    
+
 /// listening on port 3000
 app.listen(3000, function () {
     console.log("App started on port 3000");
