@@ -17,7 +17,7 @@ let dbPassword = encodeURIComponent(properties.get("db.password"));
 let dbName = properties.get("db.dbName");
 let dbUrl = properties.get("db.dbUrl");
 let dbParams = properties.get("db.params");
-
+const myRouter =require("./Routes/myRoutes.js")
 // mongoDB connection string
 const dbURI = dbPprefix + dbUserName + ":" + dbPassword + dbUrl + dbParams;
 
@@ -55,7 +55,7 @@ app.param('collectionName'
 // app.get('/collections/:collectionName/:max/:sortAspect/:sortAscDesc', function(
 app.get('/:collectionName'
     , function (req, res, next) {
-
+  //  const collectionName = req.params.collectionName;
         // req.collection.find({}, {limit: 3, sort: [["price", -1]]}).toArray
 
         // TODO: Validate params
@@ -133,6 +133,7 @@ app.get("/user", function (req, res) {
 app.get("/lessons", function (req, res) {
     res.json(lessonsData.lessons);
 });
+app.use("/api/v1",myRouter)
 
 /// handles invalid request
 app.use(function (req, res) {
