@@ -46,7 +46,8 @@ app.use(function (req, res, next) {
 });
 
 /// serving static files
-app.use('/static', express.static(path.join(__dirname, 'public')))
+var publicImagePath = path.resolve(__dirname, 'public/assets');
+app.use('/image', express.static(publicImagePath))
 
 /// https://localhost:3000/:collectionName
 /// get route returns all lessons
@@ -100,7 +101,7 @@ app.use(function (req, res) {
 /// middlware allows to intercept a param and intialize related collection
 app.param('collectionName'
     , function (req, res, next, collectionName) {
-        console.log('connection');
+        
         req.collection = db.collection(collectionName);
         return next();
     });
