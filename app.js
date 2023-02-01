@@ -50,14 +50,14 @@ app.use(function (req, res, next) {
 /// message if the image file does not exist 
 var publicImagePath = path.resolve(__dirname, 'public/assets');
 app.use('/image', express.static(publicImagePath, {
-  fallthrough: false,
+    fallthrough: false,
 }));
 /// custom error message if image does not exist
 app.use(function (err, req, res, next) {
-  if (err.code === 'ENOENT') {
-    return res.status(404).send('Custom error message: Image not found');
-  }
-  next(err);
+    if (err.code === 'ENOENT') {
+        return res.status(404).send('Custom error message: Image not found');
+    }
+    next(err);
 });
 
 /// https://localhost:3000/:collectionName
@@ -111,8 +111,24 @@ app.put('/:collectionName/:id', function (req, res, next) {
 });
 
 
+/// delete endpoint
+app.delete('/:collectionName/:id'
+    , function (req, res, next) {
+        req.collection.deleteOne(
+            { _id: new ObjectId(req.params.id) }, function (err, result) {
+                if (err) {
+                    return next(err);
+                } else {
+                    res.send((result.deletedCount === 1) ? { msg: "success" } : { msg: "error" });
+                }
+            }
+        );
+    });
+
+
+
 app.get("/", function (req, res) {
-    res.send("Welcome to my website!");
+    res.send("Running");
 });
 
 /// handles invalid request
@@ -123,7 +139,7 @@ app.use(function (req, res) {
 /// middlware allows to intercept a param and intialize related collection
 app.param('collectionName'
     , function (req, res, next, collectionName) {
-        
+
         req.collection = db.collection(collectionName);
         return next();
     });
