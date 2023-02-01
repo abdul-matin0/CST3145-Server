@@ -46,8 +46,19 @@ app.use(function (req, res, next) {
 });
 
 /// serving static files
+/// static file middleware that returns lesson images, or an error
+/// message if the image file does not exist 
 var publicImagePath = path.resolve(__dirname, 'public/assets');
-app.use('/image', express.static(publicImagePath))
+app.use('/image', express.static(publicImagePath, {
+  fallthrough: false,
+}));
+/// custom error message if image does not exist
+app.use(function (err, req, res, next) {
+  if (err.code === 'ENOENT') {
+    return res.status(404).send('Custom error message: Image not found');
+  }
+  next(err);
+});
 
 /// https://localhost:3000/:collectionName
 /// get route returns all lessons
