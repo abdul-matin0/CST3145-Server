@@ -71,6 +71,25 @@ app.get('/:collectionName', function (req, res, next) {
     });
 });
 
+/// https://localhost:3000/:collectionName/search/:text
+/// get route to get collection by id
+app.get('/:collectionName/search/:text', function (req, res, next) {
+    let searchQuery = req.params.text;
+    let query = {};
+    query = {
+      $or: [
+        { topic: { $regex: searchQuery, $options: "i" } },
+        { location: { $regex: searchQuery, $options: "i" } },
+      ],
+    };
+    req.collection.find(query, {}).toArray(function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      res.send(results);
+    });
+});
+
 /// post route saves order to order collection
 app.post('/:collectionName'
     , function (req, res, next) {
