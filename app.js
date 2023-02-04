@@ -71,17 +71,6 @@ app.get('/:collectionName', function (req, res, next) {
     });
 });
 
-/// https://localhost:3000/:collectionName/_id
-/// get route to get collection by id
-app.get('/:collectionName/:id', function (req, res, next) {
-    req.collection.findOne({ _id: new ObjectId(req.params.id) }, function (err, results) {
-        if (err) {
-            return next(err);
-        }
-        res.send(results);
-    });
-});
-
 /// post route saves order to order collection
 app.post('/:collectionName'
     , function (req, res, next) {
@@ -109,23 +98,6 @@ app.put('/:collectionName/:id', function (req, res, next) {
         res.send(results);
     });
 });
-
-
-/// delete endpoint
-app.delete('/:collectionName/:id'
-    , function (req, res, next) {
-        req.collection.deleteOne(
-            { _id: new ObjectId(req.params.id) }, function (err, result) {
-                if (err) {
-                    return next(err);
-                } else {
-                    res.send((result.deletedCount === 1) ? { msg: "success" } : { msg: "error" });
-                }
-            }
-        );
-    });
-
-
 
 app.get("/", function (req, res) {
     res.send("Running");
